@@ -1,0 +1,11 @@
+using Kassasystem.Models;
+
+namespace Kassasystem.Data;
+
+// Interface (abstraktion): resten av programmet vet bara ATT produkter
+// kan hämtas, inte VAR de kommer ifrån. Då kan vi byta från textfil till
+// t.ex. en databas, eller använda en fejkad lista i testerna.
+public interface IProductRepository
+{
+    List<Product> LoadProducts();
+}
