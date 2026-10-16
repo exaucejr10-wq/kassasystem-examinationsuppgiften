@@ -1,0 +1,25 @@
+namespace Kassasystem.Models;
+
+// En produkt i butiken, t.ex. "301;Mjölk;15.90;Styck".
+public class Product
+{
+    public int Id { get; }
+    public string Name { get; }
+    public decimal Price { get; }
+    public PriceType PriceType { get; }
+
+    public Product(int id, string name, decimal price, PriceType priceType)
+    {
+        if (id <= 0)
+            throw new ArgumentException("Produkt-ID måste vara större än 0.");
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Produkten måste ha ett namn.");
+        if (price < 0)
+            throw new ArgumentException("Priset får inte vara negativt.");
+
+        Id = id;
+        Name = name.Trim();
+        Price = price;
+        PriceType = priceType;
+    }
+}
