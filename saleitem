@@ -1,0 +1,23 @@
+namespace Kassasystem.Models;
+
+// En rad i ett köp: vilken produkt och hur mycket (antal eller kilo).
+public class SaleItem
+{
+    public Product Product { get; }
+    public decimal Quantity { get; private set; }
+
+    public SaleItem(Product product, decimal quantity)
+    {
+        Product = product;
+        Quantity = quantity;
+    }
+
+    // Priset för hela raden, avrundat till hela ören.
+    public decimal LineTotal => Math.Round(Product.Price * Quantity, 2);
+
+    // Används när samma produkt läggs till igen i samma köp.
+    public void AddQuantity(decimal extra)
+    {
+        Quantity += extra;
+    }
+}
