@@ -1,0 +1,8 @@
+namespace Kassasystem.Models;
+
+// Talar om hur en produkt prissätts: per styck eller per kilo.
+public enum PriceType
+{
+    Styck,
+    Kg
+}
