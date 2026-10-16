@@ -1,0 +1,39 @@
+namespace Kassasystem.Models;
+
+// Ett pågående köp för en kund.
+public class Sale
+{
+    public const decimal MaxQuantity = 1000;
+
+    private readonly List<SaleItem> _items = new();
+
+    // Utifrån kan man bara läsa listan, inte ändra den direkt (inkapsling).
+    public IReadOnlyList<SaleItem> Items => _items;
+
+    public bool IsEmpty => _items.Count == 0;
+
+    public decimal Total => _items.Sum(item => item.LineTotal);
+
+    public void AddItem(Product product, decimal quantity)
+    {
+        if (quantity <= 0)
+            throw new ArgumentException("Antal måste vara större än 0.");
+        if (quantity > MaxQuantity)
+            throw new ArgumentException($"Antal får inte vara större än {MaxQuantity}.");
+        if (product.PriceType == PriceType.Styck && quantity != Math.Floor(quantity))
+            throw new ArgumentException($"{product.Name} säljs per styck, ange ett heltal.");
+
+        // Finns produkten redan i köpet ökar vi bara antalet.
+        SaleItem? existing = _items.FirstOrDefault(i => i.Product.Id == product.Id);
+        if (existing != null)
+        {
+            if (existing.Quantity + quantity > MaxQuantity)
+                throw new ArgumentException($"Antal får inte vara större än {MaxQuantity}.");
+            existing.AddQuantity(quantity);
+        }
+        else
+        {
+            _items.Add(new SaleItem(product, quantity));
+        }
+    }
+}
